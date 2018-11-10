@@ -3,12 +3,15 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cons = require('consolidate');
 const dust = require('dustjs-helpers');
-const pg = require('pg');
-
-const app = express();
+const { Pool, Client } = require('pg');
 
 // db connection
 const connect = 'postgresql://root:test123@localhost/recipebookdb';
+const pool = new Pool({
+    connectionString: connect,
+})
+
+const app = express();
 
 //assign dust engine
 app.engine('dust', cons.dust);
@@ -27,7 +30,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //home route
 app.get('/', (req, res) => {
-    res.render('index');
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+        client.query('SELECT * FROM recipes', (err, result) => {
+            if (err) {
+                console.log(err.stack);
+            }
+            res.render('index', {recipes: result.rows});
+            done();
+        });
+    });
 });
 
 
