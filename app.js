@@ -42,6 +42,47 @@ app.get('/', (req, res) => {
     });
 });
 
+app.post('/add', (req, res) => {
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+        client.query('INSERT INTO recipes(name, ingredients, directions) VALUES($1, $2, $3)', [req.body.name, req.body.ingredients, req.body.directions], (err) => {
+            if (err) {
+                console.log(err.stack);
+            }
+            res.redirect('/');
+            done();
+        });
+    });
+});
+
+app.post('/edit', (req, res) => {
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+        client.query('UPDATE recipes SET name=$1, ingredients=$2, directions=$3 WHERE id=$4',
+            [req.body.name, req.body.ingredients, req.body.directions, req.body.id], (err) => {
+
+            if (err) {
+                console.log(err.stack);
+            }
+            res.redirect('/');
+            done();
+        });
+    });
+});
+
+app.delete('/delete/:id', (req, res) => {
+    pool.connect((err, client, done) => {
+        if (err) throw err;
+        client.query('DELETE FROM recipes WHERE id=$1', [req.body.id], (err) => {
+            if (err) {
+                console.log(err.stack);
+            }
+            done();
+            res.status(200);
+        });
+    });
+});
+
 
 
 
