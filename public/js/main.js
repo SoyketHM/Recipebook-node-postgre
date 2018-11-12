@@ -8,25 +8,6 @@ $(document).ready(function(){
     });
 
 
-    // $(document).ready(function () {
-    //     $('.delete_recipe').on('click', function (e) {
-    //         $target = $(e.target);
-    //         const  id =$target.attr('data-id');
-    //         $.ajax({
-    //             type: 'DELETE',
-    //             url: '/delete/'+id,
-    //             success: function (response) {
-    //                 alert('Delete Recipe??');
-    //                 window.location.href='/';
-    //             },
-    //             error: function (err) {
-    //                 console.log(err);
-    //             }
-    //         });
-    //     });
-    // });
-
-
     $('.delete_recipe').on('click', function(){
         var id = $(this).data('id');
         var url = '/delete/'+id;
@@ -36,7 +17,7 @@ $(document).ready(function(){
                 type: 'DELETE',
                 success: function (result) {
                     console.log('Deleting Recipe...');
-                    window.location('/');
+                    window.location.href= "/";
                 },
                 error: function (err) {
                     console.log(err);

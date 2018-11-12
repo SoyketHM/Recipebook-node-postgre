@@ -73,12 +73,12 @@ app.post('/edit', (req, res) => {
 app.delete('/delete/:id', (req, res) => {
     pool.connect((err, client, done) => {
         if (err) throw err;
-        client.query('DELETE FROM recipes WHERE id=$1', [req.body.id], (err) => {
+        client.query('DELETE FROM recipes WHERE id=$1', [req.params.id], (err) => {
             if (err) {
                 console.log(err.stack);
             }
             done();
-            res.status(200);
+            res.send(200);
         });
     });
 });
